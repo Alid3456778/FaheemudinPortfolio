@@ -459,3 +459,117 @@ window.addEventListener('resize', () => {
         ScrollTrigger.refresh();
     }, 250);
 });
+// ===== FAQ CHAT WIDGET =====
+(function () {
+    const widget = document.getElementById('faqChatWidget');
+    const toggleBtn = document.getElementById('faqChatToggle');
+    const closeBtn = document.getElementById('faqChatClose');
+    const body = document.getElementById('faqChatBody');
+
+    if (!widget || !toggleBtn || !body) return;
+
+    // Fallback data used if faq.json can't be fetched (e.g. opened directly
+    // as a local file:// page without a server). Keep this in sync with faq.json.
+    const fallbackFaqs = [
+        { id: 1, question: "What is your area of research?", answer: "My research focuses on IoT security and secure data transmission, with applied work in machine learning, deep learning, and GANs — including my Ph.D. thesis on a layered hash encryption approach for IoT devices." },
+        { id: 2, question: "How many years of teaching experience do you have?", answer: "17+ years of continuous teaching at Poona College of Arts, Science & Commerce (SPPU, Pune), covering 15+ UG/PG courses across Cyber Security, Java, Data Mining, and Software Engineering." },
+        { id: 3, question: "Do you hold any patents?", answer: "Yes — two patents published with Intellectual Property India: a machine-learning-based HR stress detection system (2023) and an IoT + AI energy-efficient cache localization technique for device-to-device communication (2022)." },
+        { id: 4, question: "Are you open to relocating?", answer: "Yes, I'm actively open to faculty roles across the GCC — Saudi Arabia, UAE, Qatar, Oman, Bahrain, and Kuwait." },
+        { id: 5, question: "What is your educational background?", answer: "Ph.D. in Computer Science (2025) and M.Phil. (2019) from SRTM University, Nanded; M.C.A. from Savitribai Phule Pune University (2007); and B.C.A. from SRTM University, Nanded (2004)." },
+        { id: 6, question: "How many publications do you have?", answer: "11 peer-reviewed journal publications spanning IoT security, secure data transmission, GANs, and applied deep learning — six of them published in 2025 alone." },
+        { id: 7, question: "What technical skills do you bring?", answer: "Programming in C, C++, Java, Python, and PHP; Oracle DBA-level database administration; and hands-on experience with Academic ERP systems, alongside ML/DL and IoT security frameworks." },
+        { id: 8, question: "Do you have institutional leadership experience?", answer: "Yes — I've administered my college's website and Academic ERP since 2019, managing the end-to-end online admission cycle, and contributed to NAAC and IQAC accreditation processes." },
+        { id: 9, question: "How can I get in touch with you?", answer: "You can email me at fahim.oracledba@gmail.com, call or WhatsApp +91 93729 28242, connect via LinkedIn, or just use the contact form on this site." },
+        { id: 10, question: "What languages do you speak?", answer: "English and Marathi at a professional level, and Hindi and Urdu as native languages." }
+    ];
+
+    let faqs = [];
+    let loaded = false;
+
+    function renderQuestionList() {
+        body.innerHTML = '';
+        faqs.forEach(item => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'faq-question-btn';
+            btn.textContent = item.question;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                renderAnswer(item);
+            });
+            body.appendChild(btn);
+        });
+    }
+
+    function renderAnswer(item) {
+        body.innerHTML = '';
+
+        const questionBubble = document.createElement('div');
+        questionBubble.className = 'faq-chat-bubble user';
+        questionBubble.textContent = item.question;
+        body.appendChild(questionBubble);
+
+        const answerBubble = document.createElement('div');
+        answerBubble.className = 'faq-chat-bubble bot';
+        answerBubble.textContent = item.answer;
+        body.appendChild(answerBubble);
+
+        const backBtn = document.createElement('button');
+        backBtn.type = 'button';
+        backBtn.className = 'faq-back-btn';
+        backBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Back to questions';
+        backBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            renderQuestionList();
+        });
+        body.appendChild(backBtn);
+    }
+
+    function loadFaqs() {
+        if (loaded) {
+            renderQuestionList();
+            return;
+        }
+
+        body.innerHTML = '<div class="faq-chat-loading">Loading questions…</div>';
+
+        fetch('faq.json')
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to load faq.json');
+                return res.json();
+            })
+            .then(data => {
+                faqs = Array.isArray(data) && data.length ? data : fallbackFaqs;
+                loaded = true;
+                renderQuestionList();
+            })
+            .catch(() => {
+                // faq.json couldn't be fetched (likely opened via file:// without a server)
+                faqs = fallbackFaqs;
+                loaded = true;
+                renderQuestionList();
+            });
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isActive = widget.classList.toggle('active');
+        if (isActive) loadFaqs();
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            widget.classList.remove('active');
+        });
+    }
+
+    document.addEventListener('click', (e) => {
+        const path = typeof e.composedPath === 'function' ? e.composedPath() : [];
+        const clickedInsideWidget = path.length ? path.includes(widget) : widget.contains(e.target);
+
+        if (widget.classList.contains('active') && !clickedInsideWidget) {
+            widget.classList.remove('active');
+        }
+    });
+})();

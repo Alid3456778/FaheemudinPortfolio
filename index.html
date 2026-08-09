@@ -80,7 +80,7 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo"><img src="./image.png" alt="" class="logo_img"> </div>
+            <div class="logo"><img src="./image.png" alt=""> </div>
             <div class="nav-links">
                 <a href="#home">Home</a>
                 <a href="#about">About</a>
@@ -146,9 +146,9 @@
             </div>
         </div>
         
-        <!-- <div class="scroll-indicator">
+        <div class="scroll-indicator">
             <div class="scroll-line"></div>
-        </div> -->
+        </div>
     </section>
 
     <!-- About Section -->
@@ -933,6 +933,32 @@
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- FAQ Chat Widget -->
+    <div class="faq-chat-widget" id="faqChatWidget">
+        <div class="faq-chat-window" id="faqChatWindow">
+            <div class="faq-chat-header">
+                <div class="faq-chat-header-info">
+                    <div class="faq-chat-avatar">
+                        <img src="./image.png" alt="Dr. Faheemuddin Ahmed">
+                    </div>
+                    <div>
+                        <h4>Ask Dr. Ahmed</h4>
+                        <span class="faq-chat-status">Quick answers, anytime</span>
+                    </div>
+                </div>
+                <button class="faq-chat-close" id="faqChatClose" aria-label="Close chat">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="faq-chat-body" id="faqChatBody">
+                <!-- Populated dynamically from faq.json -->
+            </div>
+        </div>
+        <button class="faq-chat-toggle" id="faqChatToggle" aria-label="Open FAQ chat">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
