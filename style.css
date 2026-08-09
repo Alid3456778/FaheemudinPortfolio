@@ -78,6 +78,14 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
 }
 
+.logo_img{
+    height: 100%;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+    display: block;
+}
+
 .nav-links {
     display: flex;
     gap: 2.5rem;
